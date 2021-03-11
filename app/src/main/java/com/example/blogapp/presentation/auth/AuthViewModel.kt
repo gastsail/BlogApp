@@ -7,7 +7,7 @@ import com.example.blogapp.core.Result
 import com.example.blogapp.domain.auth.AuthRepo
 import kotlinx.coroutines.Dispatchers
 
-class AuthScreenViewModel(private val repo: AuthRepo) : ViewModel() {
+class AuthViewModel(private val repo: AuthRepo) : ViewModel() {
 
     fun signIn(email: String, password: String) = liveData(Dispatchers.IO) {
         emit(Result.Loading())
@@ -30,7 +30,7 @@ class AuthScreenViewModel(private val repo: AuthRepo) : ViewModel() {
 }
 
 
-class AuthScreenViewModelFactory(private val repo: AuthRepo) : ViewModelProvider.Factory {
+class AuthViewModelFactory(private val repo: AuthRepo) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return modelClass.getConstructor(AuthRepo::class.java).newInstance(repo)
     }

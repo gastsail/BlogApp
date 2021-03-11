@@ -12,13 +12,13 @@ import com.example.blogapp.core.Result
 import com.example.blogapp.data.remote.auth.AuthDataSource
 import com.example.blogapp.databinding.FragmentRegisterBinding
 import com.example.blogapp.domain.auth.AuthRepoImpl
-import com.example.blogapp.presentation.auth.AuthScreenViewModel
-import com.example.blogapp.presentation.auth.AuthScreenViewModelFactory
+import com.example.blogapp.presentation.auth.AuthViewModel
+import com.example.blogapp.presentation.auth.AuthViewModelFactory
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private lateinit var binding: FragmentRegisterBinding
-    private val viewModel by viewModels<AuthScreenViewModel> { AuthScreenViewModelFactory(AuthRepoImpl(
+    private val viewModel by viewModels<AuthViewModel> { AuthViewModelFactory(AuthRepoImpl(
             AuthDataSource()
     )) }
 

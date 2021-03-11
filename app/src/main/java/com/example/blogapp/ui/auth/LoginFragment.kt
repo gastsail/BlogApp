@@ -12,15 +12,15 @@ import com.example.blogapp.core.Result
 import com.example.blogapp.data.remote.auth.AuthDataSource
 import com.example.blogapp.databinding.FragmentLoginBinding
 import com.example.blogapp.domain.auth.AuthRepoImpl
-import com.example.blogapp.presentation.auth.AuthScreenViewModel
-import com.example.blogapp.presentation.auth.AuthScreenViewModelFactory
+import com.example.blogapp.presentation.auth.AuthViewModel
+import com.example.blogapp.presentation.auth.AuthViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private val firebaseAuth by lazy { FirebaseAuth.getInstance() }
     private lateinit var binding:FragmentLoginBinding
-    private val viewModel by viewModels<AuthScreenViewModel> { AuthScreenViewModelFactory(AuthRepoImpl(
+    private val viewModel by viewModels<AuthViewModel> { AuthViewModelFactory(AuthRepoImpl(
         AuthDataSource()
     )) }
 
