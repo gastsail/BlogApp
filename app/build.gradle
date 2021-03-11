@@ -48,6 +48,7 @@ dependencies {
     // Firebase
     implementation 'com.google.firebase:firebase-firestore:22.0.1'
     implementation 'com.google.firebase:firebase-storage:19.2.1'
+    implementation 'com.google.firebase:firebase-auth:20.0.2'
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.3"

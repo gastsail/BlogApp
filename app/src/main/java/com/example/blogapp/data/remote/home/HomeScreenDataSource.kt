@@ -1,4 +1,4 @@
-package com.example.blogapp.data.remote
+package com.example.blogapp.data.remote.home
 
 import com.example.blogapp.core.Resource
 import com.example.blogapp.data.model.Post
