@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -49,6 +50,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:22.0.1'
     implementation 'com.google.firebase:firebase-storage:19.2.1'
     implementation 'com.google.firebase:firebase-auth:20.0.2'
+
+    // Firebase Crashlytics
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:17.4.1'
+    implementation 'com.google.firebase:firebase-analytics-ktx:18.0.2'
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.3"
