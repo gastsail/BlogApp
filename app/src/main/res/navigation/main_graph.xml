@@ -35,4 +35,14 @@
             android:id="@+id/action_registerFragment_to_homeScreenFragment"
             app:destination="@id/homeScreenFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.example.blogapp.ui.camera.CameraFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.blogapp.ui.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

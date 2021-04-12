@@ -14,16 +14,17 @@ import com.example.blogapp.domain.home.HomeScreenRepoImpl
 import com.example.blogapp.presentation.home.HomeScreenViewModel
 import com.example.blogapp.presentation.home.HomeScreenViewModelFactory
 import com.example.blogapp.ui.home.adapter.HomeScreenAdapter
-import java.lang.RuntimeException
 
 class HomeScreenFragment : Fragment(R.layout.fragment_home_screen) {
 
     private lateinit var binding: FragmentHomeScreenBinding
-    private val viewModel by viewModels<HomeScreenViewModel> { HomeScreenViewModelFactory(
-        HomeScreenRepoImpl(
-        HomeScreenDataSource()
-    )
-    ) }
+    private val viewModel by viewModels<HomeScreenViewModel> {
+        HomeScreenViewModelFactory(
+                HomeScreenRepoImpl(
+                        HomeScreenDataSource()
+                )
+        )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,14 +44,12 @@ class HomeScreenFragment : Fragment(R.layout.fragment_home_screen) {
                 is Result.Failure -> {
                     binding.progressBar.visibility = View.GONE
                     Toast.makeText(
-                        requireContext(),
-                        "Ocurrio un error: ${result.exception}",
-                        Toast.LENGTH_SHORT
+                            requireContext(),
+                            "Ocurrio un error: ${result.exception}",
+                            Toast.LENGTH_SHORT
                     ).show()
                 }
             }
         })
-
-
     }
 }
