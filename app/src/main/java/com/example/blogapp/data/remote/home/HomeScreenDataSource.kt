@@ -1,9 +1,13 @@
 package com.example.blogapp.data.remote.home
 
+import android.graphics.Bitmap
 import com.example.blogapp.core.Result
 import com.example.blogapp.data.model.Post
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
+import java.io.ByteArrayOutputStream
 
 class HomeScreenDataSource {
 
