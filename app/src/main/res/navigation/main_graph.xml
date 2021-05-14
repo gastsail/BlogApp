@@ -25,6 +25,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_loginFragment_to_setupProfileFragment"
+            app:destination="@id/setupProfileFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -32,8 +39,12 @@
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
-            android:id="@+id/action_registerFragment_to_homeScreenFragment"
-            app:destination="@id/homeScreenFragment" />
+            android:id="@+id/action_registerFragment_to_setupProfileFragment"
+            app:destination="@id/setupProfileFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/cameraFragment"
@@ -45,4 +56,17 @@
         android:name="com.example.blogapp.ui.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/setupProfileFragment"
+        android:name="com.example.blogapp.ui.auth.SetupProfileFragment"
+        android:label="fragment_setup_profile"
+        tools:layout="@layout/fragment_setup_profile" >
+        <action
+            android:id="@+id/action_setupProfileFragment_to_homeScreenFragment"
+            app:destination="@id/homeScreenFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
 </navigation>
