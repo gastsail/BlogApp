@@ -1,14 +1,17 @@
 package com.example.blogapp.ui.home.adapter
 
 import android.content.Context
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.blogapp.core.BaseViewHolder
+import com.example.blogapp.core.TimeAgo
 import com.example.blogapp.data.model.Post
 import com.example.blogapp.databinding.PostItemViewBinding
+import java.util.*
 
 class HomeScreenAdapter(private val postList: List<Post>) :
     RecyclerView.Adapter<BaseViewHolder<*>>() {
@@ -41,7 +44,9 @@ class HomeScreenAdapter(private val postList: List<Post>) :
                 binding.postDescription.text = item.post_description
             }
 
-            binding.postTimestamp.text = "Hace 2 horas"
+            val date = (item.post_timestamp?.time?.div(1000L))?.let { TimeAgo.timeAgo(it.toInt()) }
+            
+            binding.postTimestamp.text = date
         }
     }
 }
