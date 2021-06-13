@@ -39,8 +39,8 @@ class HomeScreenFragment : Fragment(R.layout.fragment_home_screen) {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.fetchPosts()
-                viewModel.getPosts().collect { result ->
+
+                viewModel.latestPosts.collect { result ->
                     when (result) {
                         is Result.Loading -> {
                             binding.progressBar.show()

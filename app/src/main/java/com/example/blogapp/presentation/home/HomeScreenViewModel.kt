@@ -30,10 +30,12 @@ class HomeScreenViewModel(private val repo: HomeScreenRepo): ViewModel() {
 
     // with Flow coroutine builder
     val latestPosts: StateFlow<Result<List<Post>>> = flow {
-        try{
-            emit(repo.getLatestPosts())
-        }catch (e: Exception) {
-            emit(Result.Failure(e))
+        kotlin.runCatching {
+            repo.getLatestPosts()
+        }.onFailure { throwable ->
+            emit(Result.Failure(Exception(throwable)))
+        }.onSuccess { postList ->
+            emit(postList)
         }
     }.stateIn(
             scope = viewModelScope,
