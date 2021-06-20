@@ -5,7 +5,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.blogapp.R
 import com.example.blogapp.core.Result
 import com.example.blogapp.core.hide
@@ -16,6 +19,9 @@ import com.example.blogapp.domain.home.HomeScreenRepoImpl
 import com.example.blogapp.presentation.home.HomeScreenViewModel
 import com.example.blogapp.presentation.home.HomeScreenViewModelFactory
 import com.example.blogapp.ui.home.adapter.HomeScreenAdapter
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class HomeScreenFragment : Fragment(R.layout.fragment_home_screen) {
 

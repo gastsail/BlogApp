@@ -5,7 +5,9 @@ import com.example.blogapp.data.model.Post
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.util.*
 
@@ -17,7 +19,10 @@ class CameraDataSource {
         val imageRef = FirebaseStorage.getInstance().reference.child("${user?.uid}/posts/$randomName")
         val baos = ByteArrayOutputStream()
         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val downloadUrl = imageRef.putBytes(baos.toByteArray()).await().storage.downloadUrl.await().toString()
+        var downloadUrl = ""
+        withContext(Dispatchers.IO) {
+            downloadUrl = imageRef.putBytes(baos.toByteArray()).await().storage.downloadUrl.await().toString()
+        }
         user?.let {
             it.displayName?.let { displayName ->
                 FirebaseFirestore.getInstance().collection("posts").add(Post(
