@@ -20,6 +20,7 @@ import com.example.blogapp.presentation.home.HomeScreenViewModel
 import com.example.blogapp.presentation.home.HomeScreenViewModelFactory
 import com.example.blogapp.ui.home.adapter.HomeScreenAdapter
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -29,7 +30,7 @@ class HomeScreenFragment : Fragment(R.layout.fragment_home_screen) {
     private val viewModel by viewModels<HomeScreenViewModel> {
         HomeScreenViewModelFactory(
                 HomeScreenRepoImpl(
-                        HomeScreenDataSource()
+                        HomeScreenDataSource(FirebaseFirestore.getInstance())
                 )
         )
     }
