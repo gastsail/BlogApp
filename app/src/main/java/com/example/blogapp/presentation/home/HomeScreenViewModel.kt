@@ -26,6 +26,18 @@ class HomeScreenViewModel(private val repo: HomeScreenRepo): ViewModel() {
         }
     }
 
+    fun registerLikeButtonState(postId: String, uid: String, liked: Boolean) = liveData(viewModelScope.coroutineContext + Dispatchers.Main) {
+        emit(Result.Loading())
+
+        kotlin.runCatching {
+            repo.registerLikeButtonState(postId, uid, liked)
+        }.onSuccess { likeButtonState ->
+            emit(likeButtonState)
+        }.onFailure { throwable ->
+            emit(Result.Failure(Exception(throwable.message)))
+        }
+    }
+
 }
 
 
