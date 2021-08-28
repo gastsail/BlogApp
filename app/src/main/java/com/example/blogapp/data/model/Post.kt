@@ -1,10 +1,12 @@
 package com.example.blogapp.data.model
 
-import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.ServerTimestamp
 import java.util.*
 
-data class Post(var id: String = "",
+data class Post(
+                @Exclude @JvmField
+                var id: String = "",
                 val profile_picture: String = "",
                 val profile_name: String = "",
                 @ServerTimestamp
@@ -12,4 +14,6 @@ data class Post(var id: String = "",
                 val post_image: String = "",
                 val post_description: String = "",
                 val uid: String = "",
-                val likes: Int = 0)
+                var likes: Long = 0,
+                @Exclude @JvmField
+                var liked: Boolean = false)

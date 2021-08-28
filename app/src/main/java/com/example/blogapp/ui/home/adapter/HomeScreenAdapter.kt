@@ -56,7 +56,7 @@ class HomeScreenAdapter(private val onPostClickListener: onPostClickListener) :
                 binding.postDescription.text = item.post_description
             }
 
-            if(!liked) {
+            if(!item.liked) {
                 binding.likeBtn.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_outline_heart))
             } else {
                 binding.likeBtn.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_filled_heart))

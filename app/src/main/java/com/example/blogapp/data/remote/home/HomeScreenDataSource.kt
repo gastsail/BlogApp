@@ -2,12 +2,13 @@ package com.example.blogapp.data.remote.home
 
 import com.example.blogapp.core.Result
 import com.example.blogapp.data.model.Post
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import java.lang.reflect.Field
+import kotlinx.coroutines.tasks.await
 
 class HomeScreenDataSource {
 
@@ -35,24 +36,31 @@ class HomeScreenDataSource {
                                 "created_at",
                                 DocumentSnapshot.ServerTimestampBehavior.ESTIMATE
                             )?.toDate()
-
+                            likes = post.getLong("likes") ?: 0
                             id = post.id
+                            //TODO CHECK THIS LOGIC
+                            launch {
+                                liked = isPostLiked(id, FirebaseAuth.getInstance().currentUser!!.uid)
+                                postList.add(fbPost)
+                                offer(Result.Success(postList))
+                            }
                         }
-                        postList.add(fbPost)
                     }
                 }
             } catch (e: Exception) {
                 close(e)
             }
-
-            offer(Result.Success(postList))
-
         }
 
         awaitClose { suscription?.remove() }
     }
 
-    suspend fun registerLikeButtonState(postId: String, uid: String, liked: Boolean): Result<Boolean> {
+    private suspend fun isPostLiked(postId: String, uid: String): Boolean {
+        val post = FirebaseFirestore.getInstance().collection("feelings").document(postId).get().await()
+        return post.contains(uid)
+    }
+
+     fun registerLikeButtonState(postId: String, uid: String, liked: Boolean): Result<Boolean> {
 
         val increment = FieldValue.increment(1)
         val decrement = FieldValue.increment(-1)
