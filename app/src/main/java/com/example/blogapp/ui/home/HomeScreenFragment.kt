@@ -68,19 +68,21 @@ class HomeScreenFragment : Fragment(R.layout.fragment_home_screen), OnPostClickL
     }
 
     override fun onLikeButtonClick(post: Post, liked: Boolean) {
-        post.poster?.uid?.let { safeUid ->
-            viewModel.registerLikeButtonState(post.id, safeUid, liked).observe(viewLifecycleOwner, Observer { result ->
+            viewModel.registerLikeButtonState(post.id, liked).observe(viewLifecycleOwner, Observer { result ->
                 when (result) {
-                    is Result.Loading -> { }
+                    is Result.Loading -> {
+                        Log.d("Like Transaction", "in progress ....")
+                    }
 
                     is Result.Success -> {
-                        Log.d("PostLiked", "${result.data} ")
+                        Log.d("Like Transaction", "finished")
                     }
 
                     is Result.Failure -> {
+                        // Here we should unmark the like since the transaction failed from the server
                         Toast.makeText(
                             requireContext(),
-                            "Ocurrio un error: ${result.exception}",
+                            "Error liking or disliking post: ${result.exception}",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -88,4 +90,3 @@ class HomeScreenFragment : Fragment(R.layout.fragment_home_screen), OnPostClickL
             })
         }
     }
-}

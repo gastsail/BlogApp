@@ -17,7 +17,6 @@ class HomeScreenAdapter(private val onPostClickListener: OnPostClickListener) :
     RecyclerView.Adapter<BaseViewHolder<*>>() {
 
     private var postClickListener: OnPostClickListener? = null
-    private var liked = false
     private var postList: List<Post> = emptyList()
 
     init {
@@ -51,7 +50,7 @@ class HomeScreenAdapter(private val onPostClickListener: OnPostClickListener) :
             addPostTimeStamp(item)
             setupPostImage(item)
             setupPostDescription(item)
-            tintHearthIcon()
+            tintHearthIcon(item)
             setupLikeCount(item)
             setLikeClickAction(item)
         }
@@ -80,8 +79,8 @@ class HomeScreenAdapter(private val onPostClickListener: OnPostClickListener) :
             }
         }
 
-        private fun tintHearthIcon() {
-            if(!liked) {
+        private fun tintHearthIcon(item: Post) {
+            if(!item.liked) {
                 binding.likeBtn.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_outline_heart))
                 binding.likeBtn.setColorFilter(ContextCompat.getColor(context, R.color.black))
             } else {
@@ -101,9 +100,9 @@ class HomeScreenAdapter(private val onPostClickListener: OnPostClickListener) :
 
         private fun setLikeClickAction(item: Post) {
             binding.likeBtn.setOnClickListener {
-                liked = !liked
-                tintHearthIcon()
-                postClickListener?.onLikeButtonClick(item, liked)
+                if(item.liked) item.apply { liked = false } else item.apply { liked = true }
+                tintHearthIcon(item)
+                postClickListener?.onLikeButtonClick(item, item.liked)
             }
         }
     }

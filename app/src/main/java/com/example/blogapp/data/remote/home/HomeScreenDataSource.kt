@@ -4,11 +4,11 @@ import com.example.blogapp.core.Result
 import com.example.blogapp.data.model.Post
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 class HomeScreenDataSource {
 
@@ -21,9 +21,10 @@ class HomeScreenDataSource {
             for (post in querySnapshot.documents) {
                 post.toObject(Post::class.java)?.let { fbPost ->
 
-                    val isLiked = fbPost.poster?.uid?.let { safeUid ->
-                        isPostLiked(post.id, safeUid)
-                    }
+                    val isLiked =
+                        FirebaseAuth.getInstance().currentUser?.let { safeUser ->
+                            isPostLiked(post.id, safeUser.uid)
+                        }
 
                     fbPost.apply {
                         created_at = post.getTimestamp(
@@ -46,33 +47,41 @@ class HomeScreenDataSource {
 
     private suspend fun isPostLiked(postId: String, uid: String): Boolean {
         val post = FirebaseFirestore.getInstance().collection("postsLikes").document(postId).get().await()
-        return post.contains(uid)
+        if(!post.exists()) return false
+        val likeArray: List<String> = post.get("likes") as List<String>
+        return likeArray.contains(uid)
     }
 
-     fun registerLikeButtonState(postId: String, uid: String, liked: Boolean): Result<Boolean> {
+    fun registerLikeButtonState(postId: String, liked: Boolean) {
 
         val increment = FieldValue.increment(1)
         val decrement = FieldValue.increment(-1)
 
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
         val postRef = FirebaseFirestore.getInstance().collection("posts").document(postId)
-        val feelingsRef =  FirebaseFirestore.getInstance().collection("postsLikes").document(postId)
+        val postsLikesRef = FirebaseFirestore.getInstance().collection("postsLikes").document(postId)
+        val database = FirebaseFirestore.getInstance()
 
-        val batch = FirebaseFirestore.getInstance().batch()
-
-        if(liked) {
-            batch.set(postRef, hashMapOf("likes" to increment), SetOptions.merge())
-            batch.set(feelingsRef, hashMapOf(uid to true), SetOptions.merge())
-        } else {
-            batch.set(postRef, hashMapOf("likes" to decrement), SetOptions.merge())
-            batch.delete(feelingsRef)
-        }
-
-        batch.commit()
-
-        return if(liked) {
-            Result.Success(true)
-        } else {
-            Result.Success(false)
+        database.runTransaction { transaction ->
+            val snapshot = transaction.get(postRef)
+            val likeCount = snapshot.getLong("likes")!!
+            if (likeCount >= 0) {
+                if (liked) {
+                    if(transaction.get(postsLikesRef).exists()){
+                        transaction.update(postsLikesRef, "likes", FieldValue.arrayUnion(uid))
+                    } else {
+                        transaction.set(postsLikesRef, hashMapOf("likes" to arrayListOf(uid)), SetOptions.merge())
+                    }
+                    transaction.update(postRef, "likes", increment)
+                } else {
+                    transaction.update(postRef, "likes", decrement)
+                    transaction.update(postsLikesRef, "likes", FieldValue.arrayRemove(uid))
+                }
+            }
+        }.addOnSuccessListener {
+            //TODO SEE HERE TO EMIT A RESULT WHEN THE TRANSACTION HAS FINISHED
+        }.addOnFailureListener {
+            throw Exception(it.message)
         }
     }
 }
