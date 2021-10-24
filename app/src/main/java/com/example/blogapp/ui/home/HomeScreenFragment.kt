@@ -18,12 +18,9 @@ import com.example.blogapp.domain.home.HomeScreenRepoImpl
 import com.example.blogapp.presentation.home.HomeScreenViewModel
 import com.example.blogapp.presentation.home.HomeScreenViewModelFactory
 import com.example.blogapp.ui.home.adapter.HomeScreenAdapter
-import com.example.blogapp.ui.home.adapter.onPostClickListener
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import com.example.blogapp.ui.home.adapter.OnPostClickListener
 
-class HomeScreenFragment : Fragment(R.layout.fragment_home_screen), onPostClickListener {
+class HomeScreenFragment : Fragment(R.layout.fragment_home_screen), OnPostClickListener {
 
     private lateinit var binding: FragmentHomeScreenBinding
     private val viewModel by viewModels<HomeScreenViewModel> {
