@@ -13,50 +13,39 @@ import kotlinx.coroutines.tasks.await
 class HomeScreenDataSource {
 
     @ExperimentalCoroutinesApi
-    suspend fun getLatestPosts(): Flow<Result<List<Post>>> = callbackFlow {
+    suspend fun getLatestPosts(): Result<List<Post>> {
         val postList = mutableListOf<Post>()
 
-        var postReference: Query? = null
+        withContext(Dispatchers.IO) {
+            val querySnapshot = FirebaseFirestore.getInstance().collection("posts").get().await()
+            for (post in querySnapshot.documents) {
+                post.toObject(Post::class.java)?.let { fbPost ->
 
-        try {
-            postReference = FirebaseFirestore.getInstance().collection("posts")
-                .orderBy("created_at", Query.Direction.DESCENDING)
-        } catch (e: Throwable) {
-            close(e)
-        }
+                    val isLiked = fbPost.poster?.uid?.let { safeUid ->
+                        isPostLiked(post.id, safeUid)
+                    }
 
-        val suscription = postReference?.addSnapshotListener { value, error ->
-            if (value == null) return@addSnapshotListener
-            try {
-                postList.clear()
-                for (post in value.documents) {
-                    post.toObject(Post::class.java)?.let { fbPost ->
-                        fbPost.apply {
-                            created_at = post.getTimestamp(
-                                "created_at",
-                                DocumentSnapshot.ServerTimestampBehavior.ESTIMATE
-                            )?.toDate()
-                            likes = post.getLong("likes") ?: 0
-                            id = post.id
-                            //TODO CHECK THIS LOGIC
-                            launch {
-                                liked = isPostLiked(id, FirebaseAuth.getInstance().currentUser!!.uid)
-                                postList.add(fbPost)
-                                offer(Result.Success(postList))
-                            }
+                    fbPost.apply {
+                        created_at = post.getTimestamp(
+                            "created_at",
+                            DocumentSnapshot.ServerTimestampBehavior.ESTIMATE
+                        )?.toDate()
+                        id = post.id
+
+                        if (isLiked != null) {
+                            liked = isLiked
                         }
                     }
+                    postList.add(fbPost)
                 }
-            } catch (e: Exception) {
-                close(e)
             }
         }
 
-        awaitClose { suscription?.remove() }
+        return Result.Success(postList)
     }
 
     private suspend fun isPostLiked(postId: String, uid: String): Boolean {
-        val post = FirebaseFirestore.getInstance().collection("feelings").document(postId).get().await()
+        val post = FirebaseFirestore.getInstance().collection("postsLikes").document(postId).get().await()
         return post.contains(uid)
     }
 
@@ -66,7 +55,7 @@ class HomeScreenDataSource {
         val decrement = FieldValue.increment(-1)
 
         val postRef = FirebaseFirestore.getInstance().collection("posts").document(postId)
-        val feelingsRef =  FirebaseFirestore.getInstance().collection("feelings").document(postId)
+        val feelingsRef =  FirebaseFirestore.getInstance().collection("postsLikes").document(postId)
 
         val batch = FirebaseFirestore.getInstance().batch()
 

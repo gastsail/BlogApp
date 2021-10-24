@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 class HomeScreenRepoImpl(private val dataSource: HomeScreenDataSource) : HomeScreenRepo {
 
     @ExperimentalCoroutinesApi
-    override suspend fun getLatestPosts(): Flow<Result<List<Post>>> = dataSource.getLatestPosts()
+    override suspend fun getLatestPosts(): Result<List<Post>> = dataSource.getLatestPosts()
 
     override suspend fun registerLikeButtonState(postId: String, uid: String, liked: Boolean): Result<Boolean> =
         dataSource.registerLikeButtonState(postId, uid, liked)

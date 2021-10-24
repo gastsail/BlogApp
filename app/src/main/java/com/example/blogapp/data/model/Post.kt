@@ -13,7 +13,10 @@ data class Post(
                 var created_at: Date? = null,
                 val post_image: String = "",
                 val post_description: String = "",
-                val uid: String = "",
+                val poster: Poster? = null,
                 var likes: Long = 0,
                 @Exclude @JvmField
                 var liked: Boolean = false)
+
+
+data class Poster(val username: String? = "", val uid: String? = "")

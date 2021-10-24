@@ -6,10 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.*
 import com.example.blogapp.R
 import com.example.blogapp.core.Result
 import com.example.blogapp.core.hide
@@ -74,22 +71,24 @@ class HomeScreenFragment : Fragment(R.layout.fragment_home_screen), onPostClickL
     }
 
     override fun onLikeButtonClick(post: Post, liked: Boolean) {
-        viewModel.registerLikeButtonState(post.id, post.uid, liked).observe(viewLifecycleOwner, Observer { result ->
-            when (result) {
-                is Result.Loading -> { }
+        post.poster?.uid?.let { safeUid ->
+            viewModel.registerLikeButtonState(post.id, safeUid, liked).observe(viewLifecycleOwner, Observer { result ->
+                when (result) {
+                    is Result.Loading -> { }
 
-                is Result.Success -> {
-                    Log.d("PostLiked", "${result.data} ")
-                }
+                    is Result.Success -> {
+                        Log.d("PostLiked", "${result.data} ")
+                    }
 
-                is Result.Failure -> {
-                    Toast.makeText(
-                        requireContext(),
-                        "Ocurrio un error: ${result.exception}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    is Result.Failure -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "Ocurrio un error: ${result.exception}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
-            }
-        })
+            })
+        }
     }
 }

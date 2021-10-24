@@ -50,6 +50,7 @@ class HomeScreenAdapter(private val onPostClickListener: onPostClickListener) :
             Glide.with(context).load(item.post_image).centerCrop().into(binding.postImage)
             Glide.with(context).load(item.profile_picture).centerCrop().into(binding.profilePicture)
             binding.profileName.text = item.profile_name
+
             if (item.post_description.isEmpty()) {
                 binding.postDescription.visibility = View.GONE
             } else {
@@ -61,6 +62,13 @@ class HomeScreenAdapter(private val onPostClickListener: onPostClickListener) :
             } else {
                 binding.likeBtn.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_filled_heart))
                 binding.likeBtn.setColorFilter(ContextCompat.getColor(context, R.color.red_like))
+            }
+
+            if(item.likes > 0) {
+                binding.likeCount.visibility = View.VISIBLE
+                binding.likeCount.text = "${item.likes} likes"
+            } else {
+                binding.likeCount.visibility = View.GONE
             }
 
             binding.likeBtn.setOnClickListener {

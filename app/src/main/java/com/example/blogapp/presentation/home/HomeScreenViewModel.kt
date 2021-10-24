@@ -14,13 +14,10 @@ class HomeScreenViewModel(private val repo: HomeScreenRepo): ViewModel() {
 
     fun fetchLatestPosts() = liveData(viewModelScope.coroutineContext + Dispatchers.Main) {
         emit(Result.Loading())
-
         kotlin.runCatching {
             repo.getLatestPosts()
-        }.onSuccess { flowList ->
-            flowList.collect {
-                emit(it)
-            }
+        }.onSuccess { postList ->
+            emit(postList)
         }.onFailure { throwable ->
             emit(Result.Failure(Exception(throwable.message)))
         }
