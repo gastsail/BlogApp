@@ -31,8 +31,7 @@ class AuthDataSource {
                 FirebaseFirestore.getInstance().collection("users").document(uid).set(
                     User(
                         email,
-                        username,
-                        "Photo_URL.png"
+                        username
                     )
                 )
             }

@@ -4,7 +4,9 @@ import android.graphics.Bitmap
 import com.example.blogapp.data.model.Post
 import com.example.blogapp.data.model.Poster
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -33,6 +35,5 @@ class CameraDataSource {
                         likes = 0))
             }
         }
-
     }
 }

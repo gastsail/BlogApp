@@ -9,6 +9,9 @@
         <entry key="app/src/main/res/drawable/ic_filled_heart.xml" value="0.3175925925925926" />
         <entry key="app/src/main/res/drawable/ic_outline_heart.xml" value="0.3175925925925926" />
         <entry key="app/src/main/res/layout/fragment_home_screen.xml" value="0.18659420289855072" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_register.xml" value="0.37025641025641026" />
+        <entry key="app/src/main/res/layout/fragment_setup_profile.xml" value="0.2657407407407407" />
         <entry key="app/src/main/res/layout/post_item_view.xml" value="0.5154241645244216" />
       </map>
     </option>

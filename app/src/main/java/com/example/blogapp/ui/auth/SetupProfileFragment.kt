@@ -47,8 +47,8 @@ class SetupProfileFragment : Fragment(R.layout.fragment_setup_profile) {
             val alertDialog = AlertDialog.Builder(requireContext()).setTitle("Uploading photo...").create()
             bitmap?.let {
                 if(username.isNotEmpty()) {
-                    viewModel.updateUserProfile(imageBitmap = it, username = username).observe(viewLifecycleOwner, { result ->
-                        when(result) {
+                    viewModel.updateUserProfile(imageBitmap = it, username = username).observe(viewLifecycleOwner) { result ->
+                        when (result) {
                             is Result.Loading -> {
                                 alertDialog.show()
                             }
@@ -60,7 +60,7 @@ class SetupProfileFragment : Fragment(R.layout.fragment_setup_profile) {
                                 alertDialog.dismiss()
                             }
                         }
-                    })
+                    }
                 }
             }
         }
